@@ -7,6 +7,8 @@ import { httpPostRequest } from '../../https/api';
 import { useRouter } from 'next/router';
 import { backEndUrl } from '../../commons/url.constant';
 import { useEffect } from 'react';
+import Cookies from 'universal-cookie';
+import axios from 'axios';
 
 const initialLoginValue = {
   email: '',
@@ -23,7 +25,7 @@ const stlForm: CSSProperties = {
 export default function Login() {
   const router = useRouter()
   const url = backEndUrl.loginUrl
-
+  const cookies = new Cookies();
   useEffect(() => {
     const token = localStorage.getItem('token') 
       if(token) {
@@ -32,10 +34,15 @@ export default function Login() {
       }  
   },[])
   const handleOnSubmit = (value: any) => {
-    console.log(value)
+    const date = new Date()
+    const expiresAt = date.getTime() + 60*1000*60*24*30 
     httpPostRequest(url, value).then(res => {
       if(res) {
-        localStorage.setItem('token', res?.data?.access_token)
+        cookies.set('refresh', res?.data?.refreshToken, {
+          expires: new Date(expiresAt)
+        })
+        cookies.set('token',res?.data?.access_token, )
+        console.log(cookies.get('refresh'))
         router.replace('/')
       }
     }).catch(e => {
