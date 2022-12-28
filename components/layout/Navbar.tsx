@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import homeStyle from '../../styles/Header.module.css'
 import { useEffect } from 'react';
 import Router from 'next/router';
+import Cookies from 'universal-cookie';
 
 interface NavBarProps {
   token: string
@@ -10,6 +11,7 @@ interface NavBarProps {
 export default function Navbar(props: NavBarProps) {
   const {token} = props
   const [isLogin, setLogin] = useState(false)
+  const cookies = new Cookies()
   useEffect(() => {
     if(token) {
       setLogin(true)
@@ -21,6 +23,9 @@ export default function Navbar(props: NavBarProps) {
   const handleLogout = () => {
     if(typeof window !== 'undefined') {
       localStorage.removeItem('token')
+      
+      cookies.remove('token')
+      console.log(cookies.get('refresh'))
       Router.replace('/')
     }
   }
@@ -33,7 +38,7 @@ export default function Navbar(props: NavBarProps) {
           {!isLogin && <button className='btn' onClick={() => {
             handleLogin()
           }}>Login</button>}
-          {isLogin && <button className='btn' onClick={() => {
+          { <button className='btn' onClick={() => {
             handleLogout()
           }}>Logout</button>}
         </div>

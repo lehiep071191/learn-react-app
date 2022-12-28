@@ -6,6 +6,11 @@ import { httpGetRequest } from '../https/api'
 import styles from '../styles/Home.module.css'
 
 export default function Home() {
+  useEffect(() => {
+    const user = httpGetRequest('http://localhost:5101/api/users/profile', {}).then(res => {
+      console.log(res)
+    })
+  })
   return (
     <div className={styles.container}>
       <Head>
