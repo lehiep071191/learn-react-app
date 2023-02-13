@@ -4,7 +4,7 @@ import TextField from "@mui/material/TextField";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { SxProps, Theme } from "@mui/material";
+import { Grid, SxProps, Theme, Typography } from "@mui/material";
 import * as _ from "lodash";
 import { useField } from "formik";
 
@@ -29,25 +29,30 @@ const DatePickerInput = (props: FieldProps) => {
   const [field, meta, helpers] = useField(name);
   return (
     <>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DatePicker
-          label={label}
-          value={value}
-          onChange={(newValue) => {
-            setValue(newValue);
-            formik.setFieldValue(name, newValue);
-          }}
-          renderInput={(params) => (
-            <TextField
-              fullWidth
-              {...params}
-              placeholder={placeHolder}
-              name={name}
-              value={params.value}
-            />
-          )}
-        />
-      </LocalizationProvider>
+      <Grid item={true} xs={3} sx={stylesLabel}>
+        <Typography variant="caption">{label}</Typography>
+      </Grid>
+      <Grid item={true} xs={7}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker
+            value={value}
+            onChange={(newValue) => {
+              setValue(newValue);
+              formik.setFieldValue(name, newValue);
+            }}
+            renderInput={(params) => (
+              <TextField
+                fullWidth
+                {...params}
+                placeholder={placeHolder}
+                name={name}
+                value={params.value}
+                variant="standard"
+              />
+            )}
+          />
+        </LocalizationProvider>
+      </Grid>
     </>
   );
 };

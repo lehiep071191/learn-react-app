@@ -29,12 +29,19 @@ const stlForm: CSSProperties = {
 };
 
 export default function index() {
+  const url = backEndUrl.signUpUrl;
   const handleOnSubmit = (values: any) => {
-    console.log(values);
+    httpPostRequest(url, values)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
   return (
     <>
-      <div className="container">
+      <div className="container" style={{ marginBottom: "20px" }}>
         <center style={{ marginTop: "25px", marginBottom: "25px" }}>
           <h1>SIGNUP</h1>
         </center>
@@ -54,6 +61,39 @@ export default function index() {
               }}
             >
               <div style={stlForm}>
+                <TextInputFieldFormik
+                  label={"Email"}
+                  name={"email"}
+                  placeHolder={"nhập email"}
+                  formik={formik}
+                />
+              </div>
+              <div style={stlForm}>
+                <TextInputFieldFormik
+                  label={"Tên đăng nhập"}
+                  name={"userName"}
+                  placeHolder={"Nhập tên đăng nhập"}
+                  formik={formik}
+                />
+              </div>
+              <div style={stlForm}>
+                <TextInputFieldFormik
+                  label={"Tên"}
+                  name={"name"}
+                  placeHolder={"nhập tên"}
+                  formik={formik}
+                />
+              </div>
+              <div style={stlForm}>
+                <TextInputFieldFormik
+                  label={"Mật khẩu"}
+                  name={"password"}
+                  placeHolder={"nhập mật khẩu"}
+                  type={"password"}
+                  formik={formik}
+                />
+              </div>
+              <div style={stlForm}>
                 <DatePickerInput
                   label={"Sinh nhật"}
                   name={"birthDay"}
@@ -61,8 +101,18 @@ export default function index() {
                   formik={formik}
                 />
               </div>
-
-              <Button sx={{background: 'skyblue'}} type={"submit"}>Đăng Ký</Button>
+              <div style={stlForm}>
+                <TextInputFieldFormik
+                  label={"Địa chỉ"}
+                  name={"address"}
+                  placeHolder={"nhập địa chỉ"}
+                  type={"text"}
+                  formik={formik}
+                />
+              </div>
+              <Button sx={{ background: "skyblue" }} type={"submit"}>
+                Đăng Ký
+              </Button>
             </form>
           )}
         </Formik>
