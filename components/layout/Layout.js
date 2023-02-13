@@ -11,7 +11,7 @@ export default function Layout({children}) {
     
     return <>
         <Navbar token={token}></Navbar>
-        <main>{children}</main>
+        <main className="body-height">{children}</main>
         <Footer></Footer>
     </>
 }
