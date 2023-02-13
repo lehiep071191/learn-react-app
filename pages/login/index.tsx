@@ -1,5 +1,5 @@
 import React from 'react'
-import { Formik, FormikHelpers, FormikValues, FormikProps } from 'formik';
+import { Formik } from 'formik';
 import TextInputFieldFormik from '../../components/forms/TextInput';
 import 'bootstrap/dist/css/bootstrap.css';
 import { CSSProperties } from '@mui/material/styles/createTypography';
@@ -8,12 +8,17 @@ import { useRouter } from 'next/router';
 import { backEndUrl } from '../../commons/url.constant';
 import { useEffect } from 'react';
 import Cookies from 'universal-cookie';
-import axios from 'axios';
+import * as Yup from 'yup'
 
 const initialLoginValue = {
   email: '',
   password: '',
 }
+
+const validate = Yup.object().shape({
+  email: Yup.string().required('error validate email'),
+  password: Yup.string().required('required')
+})
 
 const stlForm: CSSProperties = {
   display: 'flex',
@@ -41,8 +46,7 @@ export default function Login() {
         cookies.set('refresh', res?.data?.refreshToken, {
           expires: new Date(expiresAt)
         })
-        cookies.set('token',res?.data?.access_token, )
-        console.log(cookies.get('refresh'))
+        localStorage.setItem('token',res?.data?.access_token, )
         router.replace('/')
       }
     }).catch(e => {
@@ -53,7 +57,11 @@ export default function Login() {
     <div className='container'>
         <center style={{marginTop: "25px"}}><h1>LOGIN</h1></center>
         <Formik
-          initialValues={initialLoginValue} 
+          initialValues={initialLoginValue}
+          validationSchema={Yup.object().shape({
+            email: Yup.string().required('fasd'),
+            password: Yup.string().required('required')
+          })}
           onSubmit={(values) => {
             handleOnSubmit(values)
           }
@@ -68,6 +76,7 @@ export default function Login() {
                     placeHolder={'nhập vào email của bạn'} 
                     formik={formik}
                   />
+                  {formik.touched.email  && formik.errors.email && 'fashjsd'}
                   <TextInputFieldFormik 
                     label={'Password'} 
                     name={'password'} 
@@ -75,6 +84,7 @@ export default function Login() {
                     type={'password'}
                     formik={formik}
                   />
+                  {formik.touched.password  && formik.errors.password && 'fashjsd'}
                   <div style={{display: 'flex', justifyContent: 'center'}}>
                     <button type='submit' className='btn btn-primary' style={{marginTop: '15px', width: '120px'}}>
                       login

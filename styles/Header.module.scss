@@ -1,0 +1,38 @@
+.headerNavbar {
+    width: 100vw;
+    min-height: 70px;
+    font-size: 18px;
+    font-weight: 30px;
+    background-color: bisque;
+}
+
+.container {
+    margin: auto ; 
+    display: flex;
+    
+
+    @media  (max-width: 2600px) {
+        width: 1200px;
+        
+    }
+
+    @media (max-width: 1200px) {
+        width: 850px;
+    }
+
+    @media (max-width: 850px) {
+        width: 600px;
+        flex-direction: column;
+    }
+
+    @media (max-width: 600px) {
+        width: 400px;
+        flex-direction: column;
+    }
+    
+}
+
+.btnStyle {
+    width: '120px';
+    height: '70px';
+}

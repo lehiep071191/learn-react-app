@@ -16,7 +16,7 @@ const instanceAxios= axios.create({
 }) as MyAxiosInstance
 
 instanceAxios.setToken = function(token: string){
-    cookies.set('token', token )
+    localStorage.setItem('token', token )
 }
 
 async function refreshToken () { 
@@ -57,7 +57,7 @@ instanceAxios.interceptors.response.use((response: AxiosResponse) => {
 
             
         } catch(e) {
-
+            console.log(e)
         }
        
     }
