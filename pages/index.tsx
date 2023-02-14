@@ -1,10 +1,7 @@
 import Head from "next/head";
-import { useSelector } from "react-redux";
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
-  const state = useSelector((state: any) => state);
-  console.log(state.main);
   return (
     <div className={styles.container}>
       <Head>

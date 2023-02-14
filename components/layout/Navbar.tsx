@@ -2,18 +2,18 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import Router from "next/router";
 import Cookies from "universal-cookie";
-import { setToken } from "../../redux/actions/main";
-import { connect } from "react-redux";
+import { useDispatch } from "react-redux";
+import { setTokenValue } from "../../redux/slices/token.slice";
 
 interface NavBarProps {
   token: string;
-  setToken?: (values: string) => void;
 }
 
-function Navbar({ token, setToken = (values: string) => {} }: NavBarProps) {
+export function Navbar({ token }: NavBarProps) {
   const [isLogin, setLogin] = useState(false);
   const cookies = new Cookies();
   const [showMenu, setShowmenu] = useState<boolean>(false);
+  const dispatch = useDispatch();
   useEffect(() => {
     if (token) {
       setLogin(true);
@@ -24,7 +24,7 @@ function Navbar({ token, setToken = (values: string) => {} }: NavBarProps) {
   const handleLogout = () => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("token");
-      setToken("");
+      dispatch(setTokenValue(""));
       cookies.remove("refresh");
       Router.replace("/");
     }
@@ -157,13 +157,3 @@ function Navbar({ token, setToken = (values: string) => {} }: NavBarProps) {
     </div>
   );
 }
-
-const mapStateToPops = (state: any) => {
-  return { token: state.main.token };
-};
-
-const mapDispatchToProps = {
-  setToken,
-};
-
-export default connect(mapStateToPops, mapDispatchToProps)(Navbar);
