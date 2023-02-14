@@ -9,18 +9,13 @@ import { backEndUrl } from "../../commons/url.constant";
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
 import * as Yup from "yup";
-import { connect, useSelector } from "react-redux";
-import { setToken } from "../../redux/actions/main";
+import { useDispatch } from "react-redux";
+import { setTokenValue } from "../../redux/slices/token.slice";
 
 const initialLoginValue = {
   email: "",
   password: "",
 };
-
-const validate = Yup.object().shape({
-  email: Yup.string().required("error validate email"),
-  password: Yup.string().required("required"),
-});
 
 const stlForm: CSSProperties = {
   display: "flex",
@@ -29,17 +24,11 @@ const stlForm: CSSProperties = {
   width: "50%",
 };
 
-interface LoginProps {
-  setToken: (value: string) => void;
-}
-
-function Login(props: LoginProps) {
+export default function Login() {
   const router = useRouter();
   const url = backEndUrl.loginUrl;
   const cookies = new Cookies();
-  const store = useSelector((state: any) => state.main);
-  const { setToken } = props;
-  console.log(store);
+  const dispatch = useDispatch();
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
@@ -56,8 +45,8 @@ function Login(props: LoginProps) {
           cookies.set("refresh", res?.data?.refreshToken, {
             expires: new Date(expiresAt),
           });
-          setToken(res?.data?.access_token);
           localStorage.setItem("token", res?.data?.access_token);
+          dispatch(setTokenValue(res?.data?.access_token));
           router.replace("/");
         }
       })
@@ -117,13 +106,3 @@ function Login(props: LoginProps) {
     </div>
   );
 }
-
-const mapStateToPops = (state: any) => {
-  return { token: state.main.token };
-};
-
-const mapDispatchToProps = {
-  setToken,
-};
-
-export default connect(mapStateToPops, mapDispatchToProps)(Login);
