@@ -1,12 +1,14 @@
 import * as type from "../types";
 
-const main = (state = { name: "guest" }, action: any) => {
+const main = (state: any, action: any) => {
   switch (action.type) {
-    case type.SET_NAME:
-      return {
+    case type.SET_TOKEN:
+      debugger;
+      const result = {
         ...state,
-        name: action.payload,
+        token: action.payload,
       };
+      return result;
     default:
       return { ...state };
   }

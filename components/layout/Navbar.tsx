@@ -1,17 +1,16 @@
 import React, { useState } from "react";
-import homeStyle from "../../styles/Header.module.scss";
 import { useEffect } from "react";
 import Router from "next/router";
 import Cookies from "universal-cookie";
-import { faBars, faClose } from "@fortawesome/free-solid-svg-icons";
-import * as fontIcon from "@fortawesome/free-solid-svg-icons";
+import { setToken } from "../../redux/actions/main";
+import { connect } from "react-redux";
 
 interface NavBarProps {
   token: string;
+  setToken?: (values: string) => void;
 }
 
-export default function Navbar(props: NavBarProps) {
-  const { token } = props;
+function Navbar({ token, setToken = (values: string) => {} }: NavBarProps) {
   const [isLogin, setLogin] = useState(false);
   const cookies = new Cookies();
   const [showMenu, setShowmenu] = useState<boolean>(false);
@@ -25,6 +24,7 @@ export default function Navbar(props: NavBarProps) {
   const handleLogout = () => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("token");
+      setToken("");
       cookies.remove("refresh");
       Router.replace("/");
     }
@@ -157,3 +157,13 @@ export default function Navbar(props: NavBarProps) {
     </div>
   );
 }
+
+const mapStateToPops = (state: any) => {
+  return { token: state.main.token };
+};
+
+const mapDispatchToProps = {
+  setToken,
+};
+
+export default connect(mapStateToPops, mapDispatchToProps)(Navbar);
