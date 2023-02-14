@@ -1,0 +1,25 @@
+.product {
+  padding: 10px;
+  .container-product {
+    max-width: 1150px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, calc((100% - 60px) / 4));
+    grid-template-rows: repeat(4, 150px);
+    grid-gap: 20px;
+    @media (max-width: 920px) {
+      grid-template-columns: repeat(auto-fit, calc((100% - 40px) / 3));
+    }
+    @media (max-width: 720px) {
+      grid-template-columns: repeat(auto-fit, calc((100% - 20px) / 2));
+    }
+
+    @media (max-width: 540px) {
+      grid-template-columns: repeat(auto-fit, 100%);
+    }
+    .detail {
+      height: 150px;
+      background-color: aqua;
+    }
+  }
+}

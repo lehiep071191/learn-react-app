@@ -57,11 +57,13 @@ instanceAxios.interceptors.response.use(
           })
           .catch((e) => {
             Promise.reject(e);
+            alert(e.message);
           });
       } catch (e) {
         console.log(e);
       }
     }
+    alert(error);
   }
 );
 
@@ -86,6 +88,5 @@ export const httpPostRequest = async (url: string, params: any) => {
   if (token) {
     instanceAxios.defaults.headers.Authorization = `Bearer ${token}`;
   }
-  console.log(instanceAxios);
   return instanceAxios.post(url, params);
 };

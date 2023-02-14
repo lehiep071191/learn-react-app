@@ -2,6 +2,7 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { Layout } from "../components/layout/Layout";
 import "../public/scss/header.scss";
+import "../public/scss/product.scss";
 import { FC } from "react";
 import { Provider } from "react-redux";
 import { store } from "../redux/store";
