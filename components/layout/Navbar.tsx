@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Ref, useMemo, useRef, useState } from "react";
 import { useEffect } from "react";
 import Router from "next/router";
 import Cookies from "universal-cookie";
@@ -11,9 +11,14 @@ interface NavBarProps {
 
 export function Navbar({ token }: NavBarProps) {
   const [isLogin, setLogin] = useState(false);
+  // const [focusLink, setFocusLink] = useState<string>("home");
   const cookies = new Cookies();
   const [showMenu, setShowmenu] = useState<boolean>(false);
   const dispatch = useDispatch();
+  const loginRef: any = useRef(null);
+  const homeRef: any = useRef(null);
+  const signupRef: any = useRef(null);
+  const logoutRef: any = useRef(null);
   useEffect(() => {
     if (token) {
       setLogin(true);
@@ -21,6 +26,44 @@ export function Navbar({ token }: NavBarProps) {
       setLogin(false);
     }
   }, [token]);
+
+  const focusLink = useMemo(() => {
+    const pathName = Router.pathname
+    if (pathName.includes('/sign-up')) {
+      return 'sign-up'
+    } else if (pathName.includes('/login')) {
+      return 'login'
+    } else {
+      return 'home'
+    }
+
+    console.log(pathName)
+  }, [Router.pathname])
+
+
+  useEffect(() => {
+    homeRef.current.style.color = "skyblue";
+    loginRef.current.style.color = "skyblue";
+    signupRef.current.style.color = "skyblue";
+    switch (focusLink) {
+      case "home":
+        if (homeRef.current) {
+          homeRef.current.style.color = "red";
+        }
+        break;
+      case "login":
+        if (loginRef.current) {
+          loginRef.current.style.color = "red";
+        }
+        break;
+      case "sign-up":
+        if (signupRef.current) {
+          signupRef.current.style.color = "red";
+        }
+        
+        break;
+    }
+  }, [focusLink]);
   const handleLogout = () => {
     if (typeof window !== "undefined") {
       dispatch(setTokenValue(""));
@@ -50,6 +93,7 @@ export function Navbar({ token }: NavBarProps) {
           <div
             className="btn-style"
             color={"secondary"}
+            ref={homeRef}
             onClick={() => {
               Router.replace("/");
             }}
@@ -64,6 +108,7 @@ export function Navbar({ token }: NavBarProps) {
                 onClick={() => {
                   handleLogin();
                 }}
+                ref={loginRef}
               >
                 Login
               </div>
@@ -79,6 +124,7 @@ export function Navbar({ token }: NavBarProps) {
                 onClick={() => {
                   handleSignUp();
                 }}
+                ref={signupRef}
               >
                 SignUp
               </div>
