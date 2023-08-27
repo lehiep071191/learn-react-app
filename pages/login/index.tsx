@@ -9,8 +9,11 @@ import { backEndUrl } from "../../commons/url.constant";
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
 import * as Yup from "yup";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setTokenValue } from "../../redux/slices/token.slice";
+import { LoginParams, loginAsycThunk } from "../../redux/thunks/token.thunk";
+import { ThunkDispatch } from "@reduxjs/toolkit";
+import { getToken } from "../../redux/selectors/token.selector";
 
 const initialLoginValue = {
   email: "",
@@ -24,35 +27,21 @@ const stlForm: CSSProperties = {
   width: "50%",
 };
 
+
 export default function Login() {
   const router = useRouter();
-  const url = backEndUrl.loginUrl;
-  const cookies = new Cookies();
-  const dispatch = useDispatch();
+  const thunkDispatch = useDispatch<ThunkDispatch<any, any, any>>();
+  const token = useSelector(getToken);
   useEffect(() => {
-    const token = localStorage.getItem("token");
     if (token) {
       router.replace("/");
       alert("you logined");
     }
-  }, []);
-  const handleOnSubmit = (value: any) => {
+  }, [token]);
+  const handleOnSubmit = (value: LoginParams) => {
     const date = new Date();
     const expiresAt = date.getTime() + 60 * 1000 * 60 * 24 * 30;
-    httpPostRequest(url, value)
-      .then((res) => {
-        if (res) {
-          cookies.set("refresh", res?.data?.refreshToken, {
-            expires: new Date(expiresAt),
-          });
-          localStorage.setItem("token", res?.data?.access_token);
-          dispatch(setTokenValue(res?.data?.access_token));
-          router.replace("/");
-        }
-      })
-      .catch((e) => {
-        alert(e);
-      });
+    thunkDispatch(loginAsycThunk(value));
   };
   return (
     <div className="container">

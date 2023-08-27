@@ -6,7 +6,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Grid, SxProps, Theme, Typography } from "@mui/material";
 import * as _ from "lodash";
-import { useField } from "formik";
+import { FormikProps, useField } from "formik";
 
 const stylesLabel: SxProps<Theme> = {
   fontSize: "14px",
@@ -25,8 +25,7 @@ interface FieldProps {
 
 const DatePickerInput = (props: FieldProps) => {
   const [value, setValue] = React.useState<Dayjs | null>(null);
-  const { label, name, placeHolder, type, formik } = props;
-  const [field, meta, helpers] = useField(name);
+  const { label, name, placeHolder, formik } = props;
   return (
     <>
       <Grid item={true} xs={3} sx={stylesLabel}>
