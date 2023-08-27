@@ -5,11 +5,12 @@ import { useSelector } from "react-redux";
 
 export function Layout({ children }) {
   const token = useSelector((state) => state.token);
-  console.log("token", token.token);
+  console.log(token)
+  console.log(token)
   return (
     <>
       <Navbar token={token.token}></Navbar>
-      <main className="body-height">{children}</main>
+        <main className="body-height">{children}</main>
       <Footer></Footer>
     </>
   );

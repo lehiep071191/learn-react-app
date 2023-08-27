@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosResponse } from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import Cookies from "universal-cookie";
 const cookies = new Cookies();
 interface MyAxiosInstance extends AxiosInstance {
@@ -41,7 +41,6 @@ const requests: any[] = [];
 
 instanceAxios.interceptors.response.use(
   (response: AxiosResponse) => {
-    const { status, message } = response.data;
     return response;
   },
   async (error) => {
@@ -67,7 +66,7 @@ instanceAxios.interceptors.response.use(
   }
 );
 
-export const httpGetRequest = async (url: string, params?: any) => {
+export const httpAuthGetRequest = async (url: string, params?: any) => {
   let token;
   if (window && window.localStorage) {
     token = window.localStorage.getItem("token");
@@ -80,7 +79,7 @@ export const httpGetRequest = async (url: string, params?: any) => {
   });
 };
 
-export const httpPostRequest = async (url: string, params: any) => {
+export const httpAuthPostRequest = async (url: string, params: any) => {
   let token;
   if (window && window.localStorage) {
     token = window.localStorage.getItem("token");
@@ -89,4 +88,18 @@ export const httpPostRequest = async (url: string, params: any) => {
     instanceAxios.defaults.headers.Authorization = `Bearer ${token}`;
   }
   return instanceAxios.post(url, params);
+};
+
+export const httpPostRequest = async (url: string, data: any) => {
+  try {
+    const options: AxiosRequestConfig = {
+      headers:  {
+        "Content-type": "application/x-www-form-urlencoded",
+      }
+    }
+    const response = await axios.post(url, data, options)
+    return response;
+  } catch (e) {
+    console.log(e)
+  }
 };

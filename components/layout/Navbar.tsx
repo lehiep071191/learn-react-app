@@ -23,7 +23,6 @@ export function Navbar({ token }: NavBarProps) {
   }, [token]);
   const handleLogout = () => {
     if (typeof window !== "undefined") {
-      localStorage.removeItem("token");
       dispatch(setTokenValue(""));
       cookies.remove("refresh");
       Router.replace("/");
